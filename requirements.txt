@@ -1,0 +1,6 @@
+emoji==2.1.0
+aioschedule==0.5.2
+aiogram==2.22.1
+aiogram_broadcaster == 0.0.7
+mysql-connector-python == 8.0.31
+python-dotenv == 0.21.0

@@ -14,7 +14,9 @@ from urllib.parse import urlparse
 
 load_dotenv()
 
-dbc = urlparse(os.getenv('MYSQL_URL'))  # Parse and connect MySQl url
+print(os.getenv('MYSQL_URL'))
+
+dbc = urlparse(str(os.getenv('MYSQL_URL')))  # Parse and connect MySQl url
 mydb = mysql.connector.connect(
     host=dbc.netloc.split(":")[1].split("@")[1],
     user=dbc.netloc.split(":")[0],

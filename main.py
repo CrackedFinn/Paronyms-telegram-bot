@@ -83,6 +83,7 @@ async def send_welcome(message: types.Message):
         val = (message.chat.id,)
         mycursor.execute(sql, val)
         mydb.commit()
+    mycursor.close()
     # ADD NEW USER TO DB #
 
     kb = [[types.KeyboardButton(text="Выучить новые слова"), types.KeyboardButton(text="ТехПоддержка")]]
@@ -108,6 +109,7 @@ async def main():
         await broadcaster.run()
     finally:
         await broadcaster.close_bot()
+        mycursor.close()
 
 
 @dp.message_handler(text="Выучить новые слова")
@@ -122,7 +124,7 @@ async def without_puree(message: types.Message):
 
 
 async def scheduler():
-    aioschedule.every().day.at("7:00").do(main)
+    aioschedule.every().day.at("17:00").do(main)
     while True:
         await aioschedule.run_pending()
         await asyncio.sleep(1)

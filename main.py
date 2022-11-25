@@ -124,7 +124,7 @@ async def without_puree(message: types.Message):
 
 
 async def scheduler():
-    aioschedule.every().day.at("17:00").do(main)
+    aioschedule.every().day.at("7:00").do(main)
     while True:
         await aioschedule.run_pending()
         await asyncio.sleep(1)

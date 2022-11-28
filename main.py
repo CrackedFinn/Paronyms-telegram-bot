@@ -17,13 +17,24 @@ load_dotenv()
 print(os.getenv('MYSQL_URL'))
 
 dbc = urlparse(str(os.getenv('MYSQL_URL')))  # Parse and connect MySQl url
-mydb = mysql.connector.connect(
+
+def init_db():
+    return mysql.connector.connect(
     host=dbc.netloc.split(":")[1].split("@")[1],
     user=dbc.netloc.split(":")[0],
     passwd=dbc.netloc.split(":")[1].split("@")[0],
     database=dbc.path[1:],
-    port=dbc.netloc.split(":")[2]
-)
+    port=dbc.netloc.split(":")[2])
+
+mydb = init_db()
+
+def get_cursor():
+    global mydb
+    try:
+        mydb.ping(reconnect=True, attempts=3, delay=5)
+    except mysql.connector.Error as err:
+        mydb = init_db()
+    return mydb.cursor()
 
 NUM = ["1.", "2.", "3.", "4.", "5.", "6.", "7.", "8.", "9.", "10."]
 # IMPORT#
@@ -73,7 +84,7 @@ dp = Dispatcher(bot)
 @dp.message_handler(commands=['start']) # Run on /start command
 async def send_welcome(message: types.Message):
     # ADD NEW USER TO DB #
-    mycursor = mydb.cursor()
+    mycursor = get_cursor()
     sql = "SELECT * FROM ParonymsUsers WHERE TelegramUserID = %s"
     val = (message.chat.id,)
     mycursor.execute(sql, val)
@@ -99,7 +110,7 @@ async def send_welcome(message: types.Message):
 
 
 async def main():
-    mycursor = mydb.cursor()
+    mycursor = get_cursor()
     mycursor.execute("SELECT TelegramUserID FROM ParonymsUsers")
     myresult = mycursor.fetchall()
     users = [x[0] for x in myresult]

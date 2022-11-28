@@ -49,7 +49,7 @@ for i in range(len(Dict)):
 # MAIN#
 def post():  # Returns formatted HTML message
     ShiftCounter = 0
-    randomShift = random.randint(0, defCount - 1)
+    randomShift = random.randint(1, defCount - 1)
     for i in range(len(Dict)):
         if len(Dict[i]) == 1:
             if randomShift == ShiftCounter:

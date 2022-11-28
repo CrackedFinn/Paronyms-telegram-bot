@@ -81,7 +81,7 @@ bot = Bot(token=os.getenv('TOKEN'))  # Connect Telegram bot
 dp = Dispatcher(bot)
 
 
-@dp.message_handler(commands=['start']) # Run on /start command
+@dp.message_handler(commands=['start']) # Run on /start command.
 async def send_welcome(message: types.Message):
     # ADD NEW USER TO DB #
     mycursor = get_cursor()

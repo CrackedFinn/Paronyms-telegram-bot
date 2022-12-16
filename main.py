@@ -24,7 +24,7 @@ def init_db():
     user=dbc.netloc.split(":")[0],
     passwd=dbc.netloc.split(":")[1].split("@")[0],
     database=dbc.path[1:],
-    port=dbc.netloc.split(":")[2])
+    #port=dbc.netloc.split(":")[2])
 
 mydb = init_db()
 

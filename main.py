@@ -10,20 +10,16 @@ import aioschedule
 import mysql.connector
 import os
 from dotenv import load_dotenv
-from urllib.parse import urlparse
 
 load_dotenv()
 
-print(os.getenv('MYSQL_URL'))
-
-dbc = urlparse(str(os.getenv('MYSQL_URL')))  # Parse and connect MySQl url
-
 def init_db():
     return mysql.connector.connect(
-    host=dbc.netloc.split(":")[1].split("@")[1],
-    user=dbc.netloc.split(":")[0],
-    passwd=dbc.netloc.split(":")[1].split("@")[0],
-    database=dbc.path[1:])
+        host=os.getenv("HOST"),
+        user=os.getenv("DB_USERNAME"),
+        passwd=os.getenv("PASSWORD"),
+        database=os.getenv("DATABASE"),
+    )
 
 mydb = init_db()
 
@@ -89,11 +85,12 @@ async def send_welcome(message: types.Message):
     mycursor.execute(sql, val)
     myresult = mycursor.fetchall()
     if len(myresult) == 0:
-        sql = "INSERT INTO ParonymsUsers (TelegramUserID) VALUE (%s)"
+        sql = "INSERT INTO ParonymsUsers (TelegramUserID) VALUES (%s)"
         val = (message.chat.id,)
         mycursor.execute(sql, val)
         mydb.commit()
     mycursor.close()
+    mydb.close()
     # ADD NEW USER TO DB #
 
     kb = [[types.KeyboardButton(text="Выучить новые слова"), types.KeyboardButton(text="ТехПоддержка")]]
@@ -120,6 +117,7 @@ async def main():
     finally:
         await broadcaster.close_bot()
         mycursor.close()
+        mydb.close()
 
 
 @dp.message_handler(text="Выучить новые слова")

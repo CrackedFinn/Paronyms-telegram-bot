@@ -12,6 +12,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
+
 def init_db():
     return mysql.connector.connect(
         host=os.getenv("HOST"),
@@ -20,7 +21,9 @@ def init_db():
         database=os.getenv("DATABASE"),
     )
 
+
 mydb = init_db()
+
 
 def get_cursor():
     global mydb
@@ -29,6 +32,7 @@ def get_cursor():
     except mysql.connector.Error as err:
         mydb = init_db()
     return mydb.cursor()
+
 
 NUM = ["1.", "2.", "3.", "4.", "5.", "6.", "7.", "8.", "9.", "10."]
 # IMPORT#
@@ -75,7 +79,7 @@ bot = Bot(token=os.getenv('TOKEN'))  # Connect Telegram bot
 dp = Dispatcher(bot)
 
 
-@dp.message_handler(commands=['start']) # Run on /start command.
+@dp.message_handler(commands=['start'])  # Run on /start command.
 async def send_welcome(message: types.Message):
     # ADD NEW USER TO DB #
     mycursor = get_cursor()
@@ -115,6 +119,8 @@ async def main():
     for i in range(len(users)):
         try:
             await bot.send_message(users[i], post(), parse_mode="HTML")
+        except:
+            pass
 
 
 @dp.message_handler(text="Выучить новые слова")

@@ -4,7 +4,6 @@ Greet = open("Greeting Set.txt", encoding="utf8").readlines()
 import random
 import emoji
 from aiogram import Bot, Dispatcher, executor, types
-from aiogram_broadcaster import TextBroadcaster
 import asyncio
 import aioschedule
 import mysql.connector
@@ -110,14 +109,12 @@ async def main():
     mycursor.execute("SELECT TelegramUserID FROM ParonymsUsers")
     myresult = mycursor.fetchall()
     users = [x[0] for x in myresult]
+    mycursor.close()
+    mydb.close()
 
-    broadcaster = TextBroadcaster(users, post(), parse_mode="HTML", bot_token=os.getenv('TOKEN'))
-    try:
-        await broadcaster.run()
-    finally:
-        await broadcaster.close_bot()
-        mycursor.close()
-        mydb.close()
+    for i in range(len(users)):
+        try:
+            await bot.send_message(users[i], post(), parse_mode="HTML")
 
 
 @dp.message_handler(text="Выучить новые слова")

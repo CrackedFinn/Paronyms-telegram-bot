@@ -130,7 +130,7 @@ async def with_puree(message: types.Message):
 
 @dp.message_handler(text="ТехПоддержка")
 async def without_puree(message: types.Message):
-    await bot.send_message(message.chat.id, "Вы можете связаться с техподдержкой здесь: @EmojiCreatorSupportBot",
+    await bot.send_message(message.chat.id, "Вы можете связаться с техподдержкой здесь: @NoveSupportBot",
                            parse_mode="HTML")
 
 
